@@ -1,0 +1,73 @@
+{
+  "isa": "rv32i",
+  "default_gap": 0,
+  "tests": [
+    {
+      "name": "add_to_sub",
+      "comment": "Immediate RAW hazard between ADD and SUB via rs1",
+      "producer": {
+        "mnemonic": "add",
+        "format": "R",
+        "source_values": {
+          "rs1": 9,
+          "rs2": 13
+        }
+      },
+      "consumer": {
+        "mnemonic": "sub",
+        "format": "R",
+        "dependency_operand": "rs1",
+        "source_values": {
+          "rs2": 3
+        }
+      }
+    },
+    {
+      "name": "mul_to_xor",
+      "comment": "Forward MUL result into XOR through rs2 after one cycle",
+      "gap": 1,
+      "producer": {
+        "mnemonic": "mul",
+        "format": "R"
+      },
+      "consumer": {
+        "mnemonic": "xor",
+        "format": "R",
+        "dependency_operand": "rs2"
+      }
+    },
+    {
+      "name": "addi_to_add",
+      "comment": "I-type producer feeds R-type consumer",
+      "producer": {
+        "mnemonic": "addi",
+        "format": "I",
+        "immediate": 8,
+        "source_values": {
+          "rs1": 11
+        }
+      },
+      "consumer": {
+        "mnemonic": "add",
+        "format": "R",
+        "dependency_operand": "rs1",
+        "source_values": {
+          "rs2": 4
+        }
+      }
+    },
+    {
+      "name": "and_to_or",
+      "comment": "Bitwise chain covering rs2 dependency",
+      "producer": {
+        "mnemonic": "and",
+        "format": "R"
+      },
+      "consumer": {
+        "mnemonic": "or",
+        "format": "R",
+        "dependency_operand": "rs2"
+      }
+    }
+  ]
+}
